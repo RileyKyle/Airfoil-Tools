@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def naca_4digit_airfoil(naca_code, c=1.0, num_points=1000):
+def naca_4digit_airfoil(naca_code, c=1.0, num_points=100,cluster=True):
     """
     Generates the coordinates for a NACA 4-digit airfoil.
 
@@ -9,6 +9,7 @@ def naca_4digit_airfoil(naca_code, c=1.0, num_points=1000):
     naca_code (str or int): The 4-digit NACA code (e.g., '2412' or 2412).
     c (float): The chord length (default is 1.0).
     num_points (int): The number of points for each surface (upper and lower).
+    cluster (bool): Enables clustering around LE and TE
 
     Returns:
     tuple: (xu, yu, xl, yl, x, yc) coordinates for the upper and lower surfaces.
@@ -20,11 +21,13 @@ def naca_4digit_airfoil(naca_code, c=1.0, num_points=1000):
     p = int(naca_code[1]) / 10.0    # Location of maximum camber (as a fraction of chord)
     t = int(naca_code[2:]) / 100.0  # Maximum thickness (as a fraction of chord)
 
-    # linear spacing
-    x = np.linspace(0, c, num_points)
     
-    # For better definition around the leading edge
-    # x = (c / 2.0) * (1.0 - np.cos(np.linspace(0, np.pi, num_points)))
+    if cluster:
+        # For better definition around the leading edge
+        x = (c / 2.0) * (1.0 - np.cos(np.linspace(0, np.pi, num_points)))
+    else:
+        # linear spacing
+        x = np.linspace(0, c, num_points)
 
     # Half thickness equation
     yt = (t * c *5) * (0.2969 * np.sqrt(x/c) - 0.1260 * (x/c) - 0.3516 * (x/c)**2 + 0.2843 * (x/c)**3 - 0.1015 * (x/c)**4)
