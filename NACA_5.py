@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 def naca_5digit_airfoil(naca_code, c=1.0, num_points=1000):
     """
